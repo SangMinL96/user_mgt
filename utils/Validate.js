@@ -30,3 +30,10 @@ export const hpValid = (text)=>{
 }
 export const hpPt = /^\d{3}\d{3,4}\d{4}$/
 export const hpErr = "잘못된 번호 입니다. 예)01000000000"
+
+export const ageValid = (text)=>{
+  const regex = /^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
+  return regex.test(text); 
+}
+export const agePt = /^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/
+export const ageErr = "잘못된 생년월일 입니다. 예)1996-12-06"

@@ -5,6 +5,9 @@ import Card from '../../../component/Card';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Alert } from 'react-native';
 import AgreeModal from '../../../utils/AgreeModal';
+import * as Animatable from 'react-native-animatable';
+import { fadeDownIn } from '../../../utils/Animation';
+
 function Agree({ setCurrent }) {
   const [check, setCheck] = useState({ all: false, check1: false, check2: false, check3: false });
   const [open, setOpen] = useState(false);
@@ -31,9 +34,12 @@ function Agree({ setCurrent }) {
       );
     }
   };
+  
   return (
     <AgreeView>
-      <Title>가입약관동의</Title>
+      <Title animation={fadeDownIn} easing={"ease-in-out"}  >
+        가입약관동의
+      </Title>
       <CheckBox
         containerStyle={{ marginTop: 10, borderColor: '#f2f2f2', width: '35%', padding: 0, backgroundColor: '#f3f3f3' }}
         title="모두동의"
@@ -120,12 +126,14 @@ const AgreeView = styled.View`
   width: 100%;
   margin-top: 20%;
 `;
-const Title = styled.Text`
+
+const Title = Animatable.createAnimatableComponent(styled.Text`
   font-size: 17px;
   font-weight: bold;
   margin-left: 10px;
   color: ${(props) => props.theme.titleColor};
-`;
+`);
+
 const CardTextView = styled.View`
   flex-direction: row;
   justify-content: space-between;

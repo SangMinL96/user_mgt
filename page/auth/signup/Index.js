@@ -80,6 +80,6 @@ const Screen = styled.View`
 const RoomHeaderView = styled.View`
   flex-direction: row;
   z-index: 999;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   align-items: center;
 `;

@@ -13,9 +13,7 @@ function Phone({ setCurrent }) {
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
   const { handleSubmit, errors, clearErrors } = useForm();
 
-  /**
-   * 회원가입 서브밋 버튼 클릭시 errors 값이 바뀌면 리랜더링하여 에러 검사
-   */
+
   useEffect(() => {
     // react-hook-form 유효성 검사에서 에러 발생시 에러메시지 출력
   }, []);
@@ -25,6 +23,12 @@ function Phone({ setCurrent }) {
    * @param {object} data 회원가입 데이터 인풋값
    */
   const onSubmit = async (data) => {
+    try {
+      setCurrent(2)
+    } catch (err) {}
+  };
+
+  const onAuthCount = async (data) => {
     try {
       ref.current.focus();
     } catch (err) {}
@@ -38,7 +42,7 @@ function Phone({ setCurrent }) {
           containerStyle={{ width: '100%' }}
           disabledInputStyle={{ background: '#585858' }}
           rightIcon={
-            <TouchableOpacity onPress={onSubmit}>
+            <TouchableOpacity onPress={onAuthCount}>
               <Ionicons name={`paper-plane`} color={'#585858'} size={25} />
             </TouchableOpacity>
           }
