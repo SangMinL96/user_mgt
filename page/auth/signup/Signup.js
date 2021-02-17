@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Alert, ScrollView, Text, View } from 'react-native';
 import TextInput from '../../../component/TextInput';
+import ScrollPickers from "../../../component/ScrollPickers"
 import { Controller, useForm } from 'react-hook-form';
 import { Input, Picker } from '@99xt/first-born';
 import { Button, ButtonGroup } from 'react-native-elements';
@@ -19,17 +20,22 @@ import {
   ageErr
 } from '../../../utils/Validate';
 import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import ScrollPicker from 'react-native-picker-scrollview';
+import moment from "moment"
 function Signup({ setCurrent }) {
   const { control, handleSubmit, errors, clearErrors } = useForm();
   const [checkState, setCheckState] = useState({ id: false, name: false });
   const [category, setCategory] = useState();
   const [userType, setUserType] = useState(0);
-  const [age, setAge] = useState();
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const [text,setText] = useState()
+
   /**
    * 회원가입 서브밋 버튼 클릭시 errors 값이 바뀌면 리랜더링하여 에러 검사
    */
   useEffect(() => {
-    console.log(errors);
     // react-hook-form 유효성 검사에서 에러 발생시 에러메시지 출력
     if (Object.keys(errors).length >= 1) {
       Alert.alert(
@@ -71,9 +77,14 @@ function Signup({ setCurrent }) {
     setUserType(type);
   };
   const onChangeText = (ev) => {
-    setAge(ev?.replace(/(\d{4})(\d{2})(\d{0})/, '$1-$2-$3'));
+    setText(ev?.replace(/(\d{4})(\d{2})(\d{0})/, '$1-$2-$3'));
   };
-  console.log(age);
+  const onDatePicker =(event, selectedDate)=>{
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  }
+
   return (
     <SignupView>
       <ScrollView>
@@ -134,14 +145,22 @@ function Signup({ setCurrent }) {
         />
         <TextInput control={control} label={'성함'} name={'nm'} rule={true} />
         {userType === 1 ? (
-          <Input
-            keyboardType="number-pad"
-            placeholder={'생년월일'}
-            isValid={ageValid}
-            errorMessage={ageErr}
-            value={age}
-            onChangeText={onChangeText}
-          />
+          <InputBox>
+            <Input
+              keyboardType="number-pad"
+              placeholder={'생년월일'}
+              isValid={ageValid}
+              errorMessage={ageErr}
+              onChangeText={onChangeText}
+              value={String(moment(date).format("YYYY-MM-DD"))||text}
+            />
+            <InputBtnIcon onPress={()=>setShow(true)}>
+              <Ionicons name={'today-sharp'} color={'gray'} size={25} />
+            </InputBtnIcon>
+            {show && (
+              <ScrollPickers />
+            )}
+          </InputBox>
         ) : (
           <>
             <TextInput control={control} label={'업소명'} name={'nm'} rule={true} />
