@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Alert, ScrollView, Text, View } from 'react-native';
 import TextInput from '../../../component/TextInput';
-import ScrollPickers from "../../../component/ScrollPickers"
+import ScrollPickers from '../../../component/ScrollPickers';
 import { Controller, useForm } from 'react-hook-form';
 import { Input, Picker } from '@99xt/first-born';
 import { Button, ButtonGroup } from 'react-native-elements';
@@ -20,17 +20,14 @@ import {
   ageErr
 } from '../../../utils/Validate';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import ScrollPicker from 'react-native-picker-scrollview';
-import moment from "moment"
+import SelectInput from '../../../component/SelectInput';
 function Signup({ setCurrent }) {
   const { control, handleSubmit, errors, clearErrors } = useForm();
   const [checkState, setCheckState] = useState({ id: false, name: false });
   const [category, setCategory] = useState();
   const [userType, setUserType] = useState(0);
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-  const [text,setText] = useState()
+  const [date, setDate] = useState();
+  const [open, setOpen] = useState(false);
 
   /**
    * 회원가입 서브밋 버튼 클릭시 errors 값이 바뀌면 리랜더링하여 에러 검사
@@ -55,7 +52,7 @@ function Signup({ setCurrent }) {
       }
       clearErrors();
     }
-  }, [errors]);
+  }, [errors, date]);
 
   /**
    * 회원가입 submit 폼
@@ -77,124 +74,107 @@ function Signup({ setCurrent }) {
     setUserType(type);
   };
   const onChangeText = (ev) => {
-    setText(ev?.replace(/(\d{4})(\d{2})(\d{0})/, '$1-$2-$3'));
+    setDate(ev?.replace(/(\d{4})(\d{2})(\d{1})/, '$1-$2-$3'));
   };
-  const onDatePicker =(event, selectedDate)=>{
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  }
 
   return (
-    <SignupView>
-      <ScrollView>
-        <ButtonGroup
-          buttonStyle={{ width: '100%' }}
-          buttons={['강사', '회원']}
-          onPress={onUserType}
-          selectedIndex={userType}
-          selectedButtonStyle={{ backgroundColor: '#585858' }}
-          textStyle={{ fontWeight: 'bold' }}
-        />
-        <InputBox>
+    <>
+      <SignupView>
+        <ScrollView>
+          <ButtonGroup
+            buttonStyle={{ width: '100%' }}
+            buttons={['강사', '회원']}
+            onPress={onUserType}
+            selectedIndex={userType}
+            selectedButtonStyle={{ backgroundColor: '#585858' }}
+            textStyle={{ fontWeight: 'bold' }}
+          />
+          <InputBox>
+            <TextInput
+              control={control}
+              label={'아이디'}
+              name={'id'}
+              rule={true}
+              valid={lengthValid}
+              errMsg={lengthErr}
+              pt={lengthPt}
+            />
+            <InputBtnIcon onPress={() => onInputCheck('name')}>
+              <Ionicons
+                name={checkState.id === true ? 'checkbox-sharp' : 'checkbox-outline'}
+                color={checkState.id === true ? '#66f753' : 'gray'}
+                size={25}
+              />
+            </InputBtnIcon>
+          </InputBox>
           <TextInput
             control={control}
-            label={'아이디'}
-            name={'id'}
+            label={'이메일'}
+            name={'eml'}
             rule={true}
-            valid={lengthValid}
-            errMsg={lengthErr}
-            pt={lengthPt}
+            valid={emailValid}
+            errMsg={emailErr}
+            pt={emailPt}
           />
-          <InputBtnIcon onPress={() => onInputCheck('name')}>
-            <Ionicons
-              name={checkState.id === true ? 'checkbox-sharp' : 'checkbox-outline'}
-              color={checkState.id === true ? '#66f753' : 'gray'}
-              size={25}
-            />
-          </InputBtnIcon>
-        </InputBox>
-        <TextInput
-          control={control}
-          label={'이메일'}
-          name={'eml'}
-          rule={true}
-          valid={emailValid}
-          errMsg={emailErr}
-          pt={emailPt}
-        />
-        <TextInput
-          control={control}
-          label={'비밀번호'}
-          name={'pw'}
-          valid={pwValid}
-          errMsg={pwErr}
-          pwType={true}
-          rule={true}
-          pt={pwPt}
-        />
-        <TextInput
-          control={control}
-          label={'비밀번호 확인'}
-          name={'pw'}
-          valid={pwValid}
-          errMsg={pwErr}
-          pwType={true}
-          rule={true}
-          pt={pwPt}
-        />
-        <TextInput control={control} label={'성함'} name={'nm'} rule={true} />
-        {userType === 1 ? (
-          <InputBox>
-            <Input
-              keyboardType="number-pad"
-              placeholder={'생년월일'}
-              isValid={ageValid}
-              errorMessage={ageErr}
-              onChangeText={onChangeText}
-              value={String(moment(date).format("YYYY-MM-DD"))||text}
-            />
-            <InputBtnIcon onPress={()=>setShow(true)}>
-              <Ionicons name={'today-sharp'} color={'gray'} size={25} />
-            </InputBtnIcon>
-            {show && (
-              <ScrollPickers />
-            )}
-          </InputBox>
-        ) : (
-          <>
-            <TextInput control={control} label={'업소명'} name={'nm'} rule={true} />
-            <TextBox>
-              <Picker
-                activeStyle={{ color: 'red', fontSize: 12 }}
-                mode={'dialog'}
-                onValueChange={(ev) => setCategory(ev)}
-                selectedValue={category || null}
-              >
-                <Picker.Item value="" label="카테고리" />
-                <Picker.Item value="1" label="1" />
-                <Picker.Item value="2" label="2" />
-                <Picker.Item value="3" label="3" />
-              </Picker>
-            </TextBox>
-          </>
-        )}
+          <TextInput
+            control={control}
+            label={'비밀번호'}
+            name={'pw'}
+            valid={pwValid}
+            errMsg={pwErr}
+            pwType={true}
+            rule={true}
+            pt={pwPt}
+          />
+          <TextInput
+            control={control}
+            label={'비밀번호 확인'}
+            name={'pw'}
+            valid={pwValid}
+            errMsg={pwErr}
+            pwType={true}
+            rule={true}
+            pt={pwPt}
+          />
+          <TextInput control={control} label={'성함'} name={'nm'} rule={true} />
+          {userType === 1 ? (
+            <InputBox>
+              <Input
+                keyboardType="number-pad"
+                placeholder={'생년월일'}
+                isValid={ageValid}
+                errorMessage={ageErr}
+                onChangeText={onChangeText}
+                onPress={() => setOpen(true)}
+                value={date}
+              />
+              <InputBtnIcon onPress={() => setOpen(true)}>
+                <Ionicons name={'today-sharp'} color={'gray'} size={25} />
+              </InputBtnIcon>
+            </InputBox>
+          ) : (
+            <>
+              <TextInput control={control} label={'업소명'} name={'shop'} rule={true} />
+            </>
+          )}
 
-        <Button
-          titleStyle={{ fontWeight: 'bold' }}
-          buttonStyle={{
-            backgroundColor: '#585858',
-            borderColor: '#dadada',
-            borderWidth: 1.5,
-            height: 50,
-            borderRadius: 10
-          }}
-          containerStyle={{ width: '100%', marginTop: '10%' }}
-          title="다음"
-          onPress={handleSubmit(onSubmit)}
-        />
-      </ScrollView>
-    </SignupView>
+          <Button
+            titleStyle={{ fontWeight: 'bold' }}
+            buttonStyle={{
+              backgroundColor: '#585858',
+              borderColor: '#dadada',
+              borderWidth: 1.5,
+              height: 50,
+              borderRadius: 10
+            }}
+            containerStyle={{ width: '100%', marginTop: '10%' }}
+            title="다음"
+            onPress={handleSubmit(onSubmit)}
+          />
+        </ScrollView>
+      </SignupView>
+      {open && <ScrollPickers onChange={onChangeText} setOpen={setOpen} />}
+    </>
   );
 }
 

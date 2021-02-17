@@ -57,13 +57,13 @@ function SignupIndex({ navigation }) {
   };
   return (
     <Screen>
-      {current === 0 ? (
+      {current === 3 ? (
         <Agree setCurrent={setCurrent} />
       ) : current ===1 ?(
           <Phone setCurrent={setCurrent} />
       ) : current === 2 ? (
         <Signup setCurrent={setCurrent} />
-      ) : current === 3 ? (
+      ) : current === 0 ? (
         <Start setCurrent={setCurrent} />
       ) : null}
     </Screen>

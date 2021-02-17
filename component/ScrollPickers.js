@@ -1,184 +1,166 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import ScrollPicker from 'react-native-picker-scrollview';
+import styled from 'styled-components';
+import Dimenstions from '../utils/Dimenstions';
+import * as Animatable from 'react-native-animatable';
+import { fadeDownIn } from '../utils/Animation';
+import { TouchableOpacity } from 'react-native';
 
-const days = Array.from({ length: 31 }).map((_, index) => (index + 1).toString());
 const months = Array.from({ length: 12 }).map((_, index) => (index + 1).toString());
-const years = Array.from({ length: 2020 })
-  .map((_, index) => (index + 1).toString())
-  .concat(['----']);
-const data = [days];
+const days = Array.from({ length: 31 }).map((_, index) => (index + 1).toString());
+const years = () => {
+  let yearArray = [];
+  for (let i = 2021; i >= 1950; i--) {
+    yearArray.push(i);
+  }
+  return yearArray;
+};
 
-function ScrollPickers({ navigation }) {
-    const sp = useRef()
-    console.log(sp.scrollToIndex(2))
+function ScrollPickers({setOpen,onChange}) {
+  const { width, height } = Dimenstions;
+  const [year,setYear] =useState()
+  const [month,setMonth] =useState()
+  const [day,setDay]=useState()
+
+  const onUse = ()=>{
+    setOpen(false)
+    onChange(`${year||"1996"}-${month||"07"}-${day||"16"}`)
+  }
   return (
-    <ScrollPicker
-      ref={(ev)=>sp(ev)}
-      dataSource={years}
-      selectedIndex={0}
-      itemHeight={50}
-      wrapperHeight={250}
-      wrapperColor={'#ffffff'}
-      highlightColor={'#000000'}
-      renderItem={(data, index, isSelected) => {
-        return (
-          <View style={{ height: 200 }}>
-            <Text>{data}</Text>
-          </View>
-        );
-      }}
-      onValueChange={(data, selectedIndex) => {
-        console.log(data);
-      }}
-    />
+    <BgView animation="fadeInUpBig" duration={700} >
+      <PickerView>
+        <CountBox>
+          <PickerText>년도</PickerText>
+          <ScrollPicker
+            dataSource={years()}
+            selectedIndex={25}
+            itemHeight={40}
+            wrapperHeight={140}
+            wrapperColor={'#f7f7f7'}
+            highlightColor={'#000000'}
+            renderItem={(data, index, isSelected) => {
+              return (
+                <View>
+                  <YearText isSelected={isSelected}>{data}</YearText>
+                </View>
+              );
+            }}
+            onValueChange={(data, selectedIndex) => {
+              console.log(data)
+              setYear(data);
+            }}
+          />
+        </CountBox>
+
+        <CountBox>
+          <PickerText>월</PickerText>
+          <ScrollPicker
+            dataSource={months}
+            selectedIndex={6}
+            itemHeight={40}
+            wrapperHeight={140}
+            wrapperColor={'#f7f7f7'}
+            highlightColor={'#000000'}
+            renderItem={(data, index, isSelected) => {
+              return (
+                <View>
+                  <YearText isSelected={isSelected}>{data}</YearText>
+                </View>
+              );
+            }}
+            onValueChange={(data, selectedIndex) => {
+              setMonth(data <10 ? `0${data}`:data);
+            }}
+          />
+        </CountBox>
+
+        <CountBox>
+          <PickerText>일</PickerText>
+          <ScrollPicker
+            dataSource={days}
+            selectedIndex={15}
+            itemHeight={40}
+            wrapperHeight={140}
+            wrapperColor={'#f7f7f7'}
+            highlightColor={'#000000'}
+            renderItem={(data, index, isSelected) => {
+              return (
+                <View>
+                  <YearText isSelected={isSelected}>{data}</YearText>
+                </View>
+              );
+            }}
+            onValueChange={(data, selectedIndex) => {
+              setDay(data <10 ? `0${data}`:data);
+            }}
+          />
+        </CountBox>
+        <View>
+          <TouchableOpacity onPress={onUse}>
+            <ConfirmBtn>사용</ConfirmBtn>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>setOpen(false)}>
+            <ConfirmBtn >취소</ConfirmBtn>
+          </TouchableOpacity>
+        </View>
+      </PickerView>
+    </BgView>
   );
 }
 
 export default ScrollPickers;
 
-// console.log(days.filter(item=>item !== ""))
-// export default class ScrollPickers extends Component {
-//   render() {
-//     return (
-//       <ScrollPicker
-//         ref={(sp) => {
-//           this.sp = sp;
-//         }}
-//         dataSource={years}
-//         selectedIndex={0}
-//         itemHeight={50}
-//         wrapperHeight={250}
-//         wrapperColor={'#ffffff'}
-//         highlightColor={'#000000'}
-//         renderItem={(data, index, isSelected) => {
-//           return (
-//             <View style={{height:200}}>
-//               <Text>{data}</Text>
-//             </View>
-//           );
-//         }}
-//         onValueChange={(data, selectedIndex) => {
-//           console.log(data)
-//         }}
-//       />
-//     );
-//   }
-//   someOtherFunc(){
-//     this.sp.scrollToIndex(2);   // select 'c'
-//     let selectedValue = this.sp.getSelected();  // returns 'c'
-// }
-// }
-// import React, { useEffect, useRef, useState } from 'react';
-// import { FlatList, StyleSheet, Text, View } from 'react-native';
+const BgView = Animatable.createAnimatableComponent(styled.View`
+  position: absolute;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  top: 0;
+  background-color: rgba(107, 107, 107, 0.055);
+`);
+const PickerText = styled.Text`
+  font-size: 16px;
+  margin-top: 10px;
+  padding-bottom: 15px;
+  font-weight: bold;
+`;
+const CountBox = styled.View`
+  justify-content: space-between;
+  margin-bottom: 20px;
+  align-items: center;
+`;
 
-// const days = Array.from({ length: 31 }).map((_, index) => (index + 1).toString())
-// const months = Array.from({ length: 12 }).map((_, index) => (index + 1).toString())
-// const years = Array.from({ length: 2020 }).map((_, index) => (index + 1).toString()).concat(['----'])
-// const data = [days, months, years]
-// data.forEach(values => {
-//   values.unshift('', '')
-//   values.push('', '')
-// })
-// const ITEM_HEIGHT = 40
-// export default function ScrollPickers() {
-//   const [text, setText] = useState('')
-//   const now = new Date()
-//   const [day, setDay] = useState(now.getDay().toString())
-//   const [month, setMonth] = useState(now.getMonth().toString())
-//   const [year, setYear] = useState(now.getFullYear().toString())
-//   const lists = useRef([])
-//   const onValueChange = (index, value) => {
-//     switch (index) {
-//       case 0: setDay(value); break;
-//       case 1: setMonth(value); break;
-//       case 2: setYear(value); break;
-//       default: break;
-//     }
-//   }
-//   useEffect(() => {
-//     setText([day, month, year].filter(item => item !== '----').join('/'))
-//   }, [day, month, year])
-//   const values = [day, month, year]
-//   const timer = useRef()
-//   return (
-//     <View style={styles.container}>
-//       <Text>{text}</Text>
-//       <View style={styles.modal}>
-//         {data.map((items, index) => (
-//           <FlatList
-//             ref={(ref) => {
-//               lists.current[index] = ref
-//             }}
-//             style={{ flex: 1, width: 100 }}
-//             key={index}
-//             data={items}
-//             showsHorizontalScrollIndicator={false}
-//             showsVerticalScrollIndicator={false}
-//             initialScrollIndex={Number(values[index]) - 1}
-//             getItemLayout={(_, curr) => ({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * curr, index: curr })}
-//             onScroll={({ nativeEvent: { contentOffset: { y } } }) => {
-//               clearTimeout(timer.current)
-//               timer.current = setTimeout(() => {
-//                 const selectedIndex = Math.round(y / ITEM_HEIGHT)
-//                 onValueChange(index, data[index][selectedIndex + 2])
-//                 lists.current[index].scrollToOffset({ offset: selectedIndex * ITEM_HEIGHT, animated: true })
-//               }, 100);
-//             }}
-//             keyExtractor={(item, keyIndex) => item || `e${keyIndex}`}
-//             renderItem={({ item }) => (
-//               <View style={styles.cell}>
-//                 <Text style={values[index] === item ? styles.active : styles.inactive}>{item}</Text>
-//               </View>
-//             )}
-//           />
-//         ))}
-//         <View style={styles.line1} />
-//         <View style={styles.line2} />
-//       </View>
-//     </View>
-//   );
-// }
+const PickerView = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid #ffffff;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  padding: 10px;
+  left: 5%;
+  right: 5%;
+  width: 90%;
+  height: 230px;
+  z-index: 9999;
+  position: absolute;
+  background-color: #f7f7f7;
+  bottom: 0;
+`;
+const YearText = styled.Text`
+  width: 100%;
+  padding: 0px 10px;
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     width:"80%",
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   modal: {
-//     height: ITEM_HEIGHT * 5,
-//     backgroundColor: 'white',
-//     flexDirection: 'row',
-//   },
-//   active: {
-//     color: 'black',
-//     fontWeight: 'bold',
-//   },
-//   inactive: {
-//     color: 'gray',
-//   },
-//   cell: {
-//     height: ITEM_HEIGHT,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   line1: {
-//     height: 1,
-//     backgroundColor: 'black',
-//     position: 'absolute',
-//     left: 0,
-//     right: 0,
-//     top: ITEM_HEIGHT * 2,
-//   },
-//   line2: {
-//     height: 1,
-//     backgroundColor: 'black',
-//     position: 'absolute',
-//     left: 0,
-//     right: 0,
-//     top: ITEM_HEIGHT * 3,
-//   },
-// });
+  text-align: center;
+  font-size: ${(props) => (props.isSelected ? '22px' : '16px')};
+  color: ${(props) => (props.isSelected ? '#3b3b3b' : 'gray')};
+  font-weight: ${(props) => (props.isSelected ? 'bold' : '500')};
+`;
+const ConfirmBtn = styled.Text`
+  margin-top:10px;
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 14px;
+`;

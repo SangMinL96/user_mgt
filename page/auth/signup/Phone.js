@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { Alert, Text, StyleSheet } from 'react-native';
+import { Alert, Text, StyleSheet, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'react-native-elements';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
+import CountDown from 'react-native-countdown-component';
+import Timer from '../../../component/Timer';
 
 function Phone({ setCurrent }) {
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: 4 });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue });
   const { handleSubmit, errors, clearErrors } = useForm();
-
+  const [clear, setClear] = useState(false);
+  const [count, setCount] = useState(false);
 
   useEffect(() => {
     // react-hook-form 유효성 검사에서 에러 발생시 에러메시지 출력
@@ -24,16 +27,22 @@ function Phone({ setCurrent }) {
    */
   const onSubmit = async (data) => {
     try {
-      setCurrent(2)
+      setCurrent(2);
     } catch (err) {}
   };
 
   const onAuthCount = async (data) => {
     try {
-      ref.current.focus();
+      setCount(true);
+      Alert.alert(
+        '휴대폰 인증',
+        '3분내 인증번호를 입력해주세요.',
+        [{ text: '확인', onPress: () => ref.current.focus() }],
+        { cancelable: false }
+      );
     } catch (err) {}
   };
-  
+
   return (
     <PhoneView>
       <InputBox>
@@ -52,6 +61,11 @@ function Phone({ setCurrent }) {
           labelStyle={{ color: '#585858' }}
         />
       </InputBox>
+      {count ? (
+        <View>
+          <Timer setCount={setCount} setClear={setClear} />
+        </View>
+      ) : null}
       <CodeField
         ref={ref}
         {...props}

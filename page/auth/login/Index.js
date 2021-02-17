@@ -3,7 +3,6 @@ import { SafeAreaView, Text, View } from 'react-native';
 import styled from "styled-components/native"
 import Login from './Login';
 import { Ionicons } from "@expo/vector-icons";
-import ScrollPickers from '../../../component/ScrollPickers';
 function LoginIndex({navigation}){
   useEffect(() => {
     navigation.setOptions({
@@ -12,7 +11,6 @@ function LoginIndex({navigation}){
 }, [navigation]);
  return (
    <Screen>
-     <ScrollPickers/>
       <Login/>
    </Screen>
   );
