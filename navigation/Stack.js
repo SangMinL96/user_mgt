@@ -41,7 +41,7 @@ export default function Stack() {
       mode="card"
       headerMode="screen"
     >
-      {!isLogined ? (
+      {isLogined ? (
         <>
         <Stack.Screen name="Tabs" component={Tabs} />
         </>
