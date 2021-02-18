@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { PermissionsAndroid, } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { Button } from 'react-native-elements';
 import styled from 'styled-components/native';
-import { captureScreen } from 'react-native-view-shot';
-function Start() {
-  const [value, setValue] = useState('사랑해요');
+import ViewShot from 'react-native-view-shot';
+import MediaLibrary from "expo-media-library"
 
-  // const targetPixelCount = 1080; // If you want full HD pictures
-  // const pixels = targetPixelCount / pixelRatio;
-  
-  // captureScreen({
-  //   format: "jpg",
-  //   quality: 0.8
-  // }).then(
-  //   uri => console.log("Image saved to", uri),
-  //   error => console.error("Oops, snapshot failed", error)
-  // );
+function Start() {
+  const [value, setValue] = useState('3814');
+
+  const captureRef = useRef();
+
+  const getPhotoUri = async () => {
+    const uri = await captureRef.current.capture();
+    return uri;
+  };
+  const hasAndroidPermission = async () => {
+    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+    const hasPermission = await PermissionsAndroid.check(permission);
+    if (hasPermission) {
+      return true;
+    }
+    const status = await PermissionsAndroid.request(permission);
+    return status === 'granted';
+  };
+
+  const onSave = async () => {
+    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
+      toast('갤러리 접근 권한이 없어요');
+      return;
+    }
+    const uri = await getPhotoUri();
+   const result =  await MediaLibrary.saveToLibraryAsync(uri);
+    console.log('🐤result', result);
+  };
+
   return (
     <StartView>
       <StartLogo
@@ -31,6 +49,7 @@ function Start() {
       <StartText animation="pulse" iterationCount={3}>
         반드시 저장 또는 메모를 해주세요!
       </StartText>
+      <ViewShot ref={captureRef} options={{ format: 'jpg', quality: 0.9 }}>
       <CodeBox>
         {value.split('').map((item, index) => (
           <CodeText
@@ -55,7 +74,7 @@ function Start() {
           </CodeText>
         ))}
       </CodeBox>
-
+      </ViewShot>
       <Button
         titleStyle={{ fontWeight: 'bold' }}
         buttonStyle={{
@@ -67,6 +86,7 @@ function Start() {
         }}
         containerStyle={{ width: '80%', marginTop: '10%' }}
         title="MGT 시작하기"
+        onPress={onSave}
       />
     </StartView>
   );
