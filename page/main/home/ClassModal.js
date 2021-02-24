@@ -33,7 +33,7 @@ const ClassModal = ({ modal, setModal, classData }) => {
                   resizeMode="cover"
                   source={{
                     uri:
-                      'https://lh3.googleusercontent.com/proxy/-nj5Kk7ehuYP4VhSU5WGjijaQfNuVfF6G8lzdK0UeE5Araf0AIz-lyDBsgyAP9ATCDzZp39Pgr9CfkaQrXRYvJfgD4Fc5HFwRYl03j9jOInPXNhu'
+                      'https://mblogthumb-phinf.pstatic.net/MjAyMDAzMDNfMTg4/MDAxNTgzMjQyMTQwMzc2.M9tYccsHbZWy2U4Hy9zZgO6OvwE208ZUfLGvi6Om9HAg.3c82H8Oy5WYQF4h2J3vbjKNg278xZ_WqB8hmX_eDKJ0g.JPEG.thfwl4514/IMG_6285.JPG?type=w800'
                   }}
                 />
                 <Teacher>{classData.teacher}</Teacher>

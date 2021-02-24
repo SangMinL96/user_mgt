@@ -1,6 +1,6 @@
 export default  {
     blackColor: '#262626',
-    titleColor:"#4e4e4e",
+    titleColor:"#4b4b4b",
     greyColor: '#FAFAFA',
     darkGreyColor: '#999',
     lightGreyColor: 'rgb(230, 230, 230)',
