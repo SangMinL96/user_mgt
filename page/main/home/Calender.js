@@ -133,7 +133,7 @@ export default function Calender() {
           dayLabelStyle={{ color: '#585858' }}
         />
       </View>
-      {modal ? <ClassModal setModal={setModal} classData={classData} /> : null}
+      {modal ? <ClassModal modal={modal} setModal={setModal} classData={classData} /> : null}
     </>
   );
 }
@@ -247,14 +247,14 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth
   },
   dayLabel: {
-    width: '20%',
+    width: '16%',
     alignItems: 'center',
     padding: 10,
     borderRightColor: 'grey',
     borderRightWidth: StyleSheet.hairlineWidth
   },
   monthDateText: {
-    fontSize: 20
+    fontSize: 17,
   },
   dayText: {},
   allEvents: {
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   event: {
     flex: 1,
     width: '100%',
-    height: 80,
+    height: 68,
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10
@@ -307,9 +307,9 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     width: 140,
-    fontSize: 13.5,
+    fontSize: 13,
     fontWeight: 'bold',
-    color: '#1f1f1f',
+    color: '#363636',
     marginBottom: 3
   },
   eventText: {

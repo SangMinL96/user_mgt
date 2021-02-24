@@ -1,18 +1,22 @@
 import React, { useEffect } from 'react';
 import {  Text, View } from 'react-native';
 import styled from "styled-components/native"
-import MyProfile from './MyProfile';
-function MyIndex(){
+import { Ionicons } from "@expo/vector-icons";
+
+function MyProfile(){
  
  return (
    <Screen>
-     <MyProfile/>
+   
    </Screen>
   );
 }
 
-export default MyIndex;
+export default MyProfile;
 const Screen = styled.View`
- flex: 1;
+ width:100%;
+ height:30%;
+ background-color:red;
+ justify-content: space-evenly;
  align-items: center;
 `;

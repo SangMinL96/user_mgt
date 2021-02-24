@@ -66,7 +66,7 @@ const ClassView = styled.View`
 `;
 const DtlTitle = styled.Text`
   text-align: center;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   margin-bottom: 5px;
   color: ${(props) => props.theme.blackColor};
@@ -89,7 +89,7 @@ const Avatar = styled.Image`
 `;
 const Teacher = styled.Text`
   margin-top: 10px;
-  font-size: 15px;
+  font-size: 14px;
   color: ${(props) => props.theme.blackColor};
   font-weight: 700;
 `;
@@ -105,12 +105,12 @@ const BtnView = styled.View`
   width: 100%;
   height: 35px;
   margin-top: 20px;
-  border-top-width: 1px;
+  border-top-width: 0.6px;
   border-top-color: gray;
   flex-direction: row;
 `;
 const BtnLine = styled.Text`
-  border-left-width: 1px;
+  border-left-width: 0.6px;
   border-left-color: #a7a7a7;
   width: 1px;
 `;
