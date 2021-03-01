@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { Ionicons } from '@expo/vector-icons';
 import { shadowStyle } from '../../../utils/Shadow';
 import { TouchableOpacity, Platform } from 'react-native';
+
 let iconName = Platform.OS === 'ios' ? 'ios-' : 'md-';
 function MyProfile() {
   return (
